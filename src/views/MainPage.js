@@ -4,29 +4,56 @@ import '../Main.css'
 
 function MainPage() {
 
+    const [wordArr, setWordArr] = useState([])
     const [words, setWords] = useState([
         {
             id:0,
-            digit:'ㅂ'
+            digit:['','','','','','']
         },
-        {id:1},
-        {id:2},
-        {id:3},
-        {id:4},
-        {id:5},
+        {
+            id:1,
+            digit:['','','','','','']
+        },
+        {
+            id:2,
+            digit:['','','','','','']
+        },
+        {
+            id:3,
+            digit:['','','','','','']
+        },
+        {
+            id:4,
+            digit:['','','','','','']
+        },
+        {
+            id:5,
+            digit:['','','','','','']
+        }
     ]);
 
     const line = 0;
     const digit = 0;
-    console.log(words[line].digit0);
+    console.log(words);
 
     const getText = (e, text) => {
 
         console.log("this is text :", text);
-        
-        
-        
+        setWordArr([...wordArr, text]);
+
+        //console.log(wordArr.length);
+        onToggle(line);
+
+
     }
+
+    const onToggle = id => {
+        setWords(
+            words.map(word =>
+                word.id === id ? { ...word, digit: wordArr } : word
+          )
+        );
+    };
 
     return (
         <>
@@ -55,12 +82,12 @@ function MainPage() {
 function Word({word}) {
     return (
         <div className="flex justify-center mb-1">
-            <div className="w-14 h-14 border-solid border-2 flex items-center justify-center mx-0.5 text-2xl font-bold rounded bg-white border-slate-200">{word.digit0}</div>
-            <div className="w-14 h-14 border-solid border-2 flex items-center justify-center mx-0.5 text-2xl font-bold rounded bg-white border-slate-200">{word.digit1}</div>
-            <div className="w-14 h-14 border-solid border-2 flex items-center justify-center mx-0.5 text-2xl font-bold rounded bg-white border-slate-200">{word.digit2}</div>
-            <div className="w-14 h-14 border-solid border-2 flex items-center justify-center mx-0.5 text-2xl font-bold rounded bg-white border-slate-200">{word.digit3}</div>
-            <div className="w-14 h-14 border-solid border-2 flex items-center justify-center mx-0.5 text-2xl font-bold rounded bg-white border-slate-200">{word.digit4}</div>
-            <div className="w-14 h-14 border-solid border-2 flex items-center justify-center mx-0.5 text-2xl font-bold rounded bg-white border-slate-200">{word.digit5}</div>
+            <div className="w-14 h-14 border-solid border-2 flex items-center justify-center mx-0.5 text-2xl font-bold rounded bg-white border-slate-200">{word.digit[0]}</div>
+            <div className="w-14 h-14 border-solid border-2 flex items-center justify-center mx-0.5 text-2xl font-bold rounded bg-white border-slate-200">{word.digit[1]}</div>
+            <div className="w-14 h-14 border-solid border-2 flex items-center justify-center mx-0.5 text-2xl font-bold rounded bg-white border-slate-200">{word.digit[2]}</div>
+            <div className="w-14 h-14 border-solid border-2 flex items-center justify-center mx-0.5 text-2xl font-bold rounded bg-white border-slate-200">{word.digit[3]}</div>
+            <div className="w-14 h-14 border-solid border-2 flex items-center justify-center mx-0.5 text-2xl font-bold rounded bg-white border-slate-200">{word.digit[4]}</div>
+            <div className="w-14 h-14 border-solid border-2 flex items-center justify-center mx-0.5 text-2xl font-bold rounded bg-white border-slate-200">{word.digit[5]}</div>
         </div>
     )
 }
