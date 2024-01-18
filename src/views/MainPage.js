@@ -1,59 +1,128 @@
-import React, {useState} from 'react'
+import React, { useState, useEffect} from 'react'
 import 'bootstrap/dist/css/bootstrap.css';
 import '../Main.css'
 
 function MainPage() {
 
-    const [wordArr, setWordArr] = useState([])
+    const [wordArr, setWordArr] = useState([]);
+    const [compareArr, setCompareArr] = useState([]);
     const [words, setWords] = useState([
         {
             id:0,
-            digit:['','','','','','']
+            digit:['','','','','',''],
+            state:['B','B', 'B', 'B', 'B','B']
         },
         {
             id:1,
-            digit:['','','','','','']
+            digit:['','','','','',''],
+            state:['B','B', 'B', 'B', 'B','B']
         },
         {
             id:2,
-            digit:['','','','','','']
+            digit:['','','','','',''],
+            state:['B', 'B', 'B', 'B', 'B', 'B']
         },
         {
             id:3,
-            digit:['','','','','','']
+            digit:['','','','','',''],
+            state:['B','B', 'B', 'B', 'B','B']
         },
         {
             id:4,
-            digit:['','','','','','']
+            digit:['','','','','',''],
+            state:['B','B', 'B', 'B', 'B','B']
         },
         {
             id:5,
-            digit:['','','','','','']
+            digit:['','','','','',''],
+            state:['B','B', 'B', 'B', 'B','B']
         }
     ]);
 
-    const line = 0;
-    const digit = 0;
-    console.log(words);
+    const [digit, setDigit] = useState(0);
+    const [line, setLine] = useState(0);
+    const [answer, setAnswer] = useState("정답");
+    const Hangul = require('hangul-js');
 
-    const getText = (e, text) => {
+    //console.log(words);
 
-        console.log("this is text :", text);
+    //const arr = [];
+
+    useEffect(() => {
+        if(digit < 6) {
+            addText(line);
+            console.log(digit);
+        } else if(digit == 6) {
+            addText(line);
+            checkText(wordArr);
+        } else {
+            console.log("입력불가");
+        }
+
+      }, [wordArr, digit]);
+
+      useEffect(() => {
+
+        
+      }, [compareArr])
+
+    const getText = text => {
+
         setWordArr([...wordArr, text]);
-
-        //console.log(wordArr.length);
-        onToggle(line);
-
+        setDigit(digit + 1);
 
     }
 
-    const onToggle = id => {
+    const addText = id => {
         setWords(
             words.map(word =>
                 word.id === id ? { ...word, digit: wordArr } : word
           )
         );
     };
+
+    const deleteText = () => {
+
+        if(digit > 0) {
+            wordArr.pop();
+            setDigit(digit - 1);
+        }
+    };
+
+    // 단어의 형태가 맞는지 확인
+    const checkText = word => {
+
+    }
+
+    // 단어 제출
+    const submitWord = word => {
+        console.log("submitWord : " + word);
+
+        if(digit < 6) {
+            alert("음운이 부족합니다");
+        } else {
+            const answerArr = Hangul.disassemble(answer);
+            for (let i = 0; i < answerArr.length; i++) {
+
+                if (word[i] === answerArr[i]) {
+                    compareArr[i] = 'C';
+                } else if (answerArr.includes(word[i])) {
+                    compareArr[i] = 'U';
+                } else {
+                    compareArr[i] = 'N';
+                }
+            }
+
+            words[line].state = compareArr;
+
+            setDigit(0);
+            setLine(line + 1);
+            setWordArr([]);
+
+            console.log("compareArr : " + compareArr);
+        }
+
+    }
 
     return (
         <>
@@ -70,9 +139,9 @@ function MainPage() {
                 <Word word={words[5]}/>
             </div>
             <div className="container-sm p-3">
-                <div className="flex justify-center mb-1"><button onClick={(e)=>{getText(e, e.target.innerText)}} className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅂ</button><button className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅈ</button><button className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㄷ</button><button className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㄱ</button><button className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅅ</button><button className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅛ</button><button className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅕ</button><button className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅑ</button></div>
-                <div className="flex justify-center mb-1"><button onClick={(e)=>{getText(e, e.target.innerText)}} className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅁ</button><button className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㄴ</button><button className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅇ</button><button className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㄹ</button><button className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅎ</button><button className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅗ</button><button className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅓ</button><button className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅏ</button><button className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅣ</button></div>
-                <div className="flex justify-center"><button className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "65.4px", height: "58px"}}>입력</button><button className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅋ</button><button className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅌ</button><button className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅊ</button><button className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅍ</button><button className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅠ</button><button className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅜ</button><button className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅡ</button><button className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "65.4px", height: "58px"}}>삭제</button></div>
+                <div className="flex justify-center mb-1"><button onClick={(e)=>{getText(e.target.innerText)}} className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅂ</button><button onClick={(e)=>{getText(e.target.innerText)}} className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅈ</button><button onClick={(e)=>{getText(e.target.innerText)}} className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㄷ</button><button onClick={(e)=>{getText(e.target.innerText)}} className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㄱ</button><button onClick={(e)=>{getText(e.target.innerText)}} className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅅ</button><button onClick={(e)=>{getText(e.target.innerText)}} className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅛ</button><button onClick={(e)=>{getText(e.target.innerText)}} className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅕ</button><button onClick={(e)=>{getText(e.target.innerText)}} className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅑ</button></div>
+                <div className="flex justify-center mb-1"><button onClick={(e)=>{getText(e.target.innerText)}} className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅁ</button><button onClick={(e)=>{getText(e.target.innerText)}} className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㄴ</button><button onClick={(e)=>{getText(e.target.innerText)}} className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅇ</button><button onClick={(e)=>{getText(e.target.innerText)}} className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㄹ</button><button onClick={(e)=>{getText(e.target.innerText)}} className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅎ</button><button onClick={(e)=>{getText(e.target.innerText)}} className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅗ</button><button onClick={(e)=>{getText(e.target.innerText)}} className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅓ</button><button onClick={(e)=>{getText(e.target.innerText)}} className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅏ</button><button onClick={(e)=>{getText(e.target.innerText)}} className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅣ</button></div>
+                <div className="flex justify-center"><button onClick={(e)=>{submitWord(words[line].digit)}} className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "65.4px", height: "58px"}}>입력</button><button onClick={(e)=>{getText(e.target.innerText)}} className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅋ</button><button onClick={(e)=>{getText(e.target.innerText)}} className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅌ</button><button onClick={(e)=>{getText(e.target.innerText)}} className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅊ</button><button onClick={(e)=>{getText(e.target.innerText)}} className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅍ</button><button onClick={(e)=>{getText(e.target.innerText)}} className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅠ</button><button onClick={(e)=>{getText(e.target.innerText)}} className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅜ</button><button onClick={(e)=>{getText(e.target.innerText)}} className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "40px", height: "58px"}}>ㅡ</button><button onClick={deleteText} className="flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none bg-slate-200 hover:bg-slate-300 active:bg-slate-400" style={{width: "65.4px", height: "58px"}}>삭제</button></div>
             </div>
         </div>
         </>
@@ -80,14 +149,34 @@ function MainPage() {
 }
 
 function Word({word}) {
+
+    const colorBasic = "w-14 h-14 border-solid border-2 flex items-center justify-center mx-0.5 text-2xl font-bold rounded ";
+    const colorWhite = "bg-white border-slate-200";
+    const colorGrey = "bg-slate-400 text-white border-slate-400 cell-animation";
+    const colorGreen = "bg-green-500 text-white border-green-500 cell-animation";
+    const colorYellow = "bg-yellow-500 text-white border-yellow-500 cell-animation";
+    const colorState = [colorWhite, colorWhite, colorWhite, colorWhite, colorWhite, colorWhite];
+
+    for(let i = 0; i < word.state.length; i++) {
+        if(word.state[i] == 'N') {
+            colorState[i] = colorGrey;
+        } else if(word.state[i] == 'C') {
+            colorState[i] = colorGreen;
+        } else if(word.state[i] == 'B') {
+            colorState[i] = colorWhite;
+        } else {
+            colorState[i] = colorYellow;
+        }
+    }
+
     return (
         <div className="flex justify-center mb-1">
-            <div className="w-14 h-14 border-solid border-2 flex items-center justify-center mx-0.5 text-2xl font-bold rounded bg-white border-slate-200">{word.digit[0]}</div>
-            <div className="w-14 h-14 border-solid border-2 flex items-center justify-center mx-0.5 text-2xl font-bold rounded bg-white border-slate-200">{word.digit[1]}</div>
-            <div className="w-14 h-14 border-solid border-2 flex items-center justify-center mx-0.5 text-2xl font-bold rounded bg-white border-slate-200">{word.digit[2]}</div>
-            <div className="w-14 h-14 border-solid border-2 flex items-center justify-center mx-0.5 text-2xl font-bold rounded bg-white border-slate-200">{word.digit[3]}</div>
-            <div className="w-14 h-14 border-solid border-2 flex items-center justify-center mx-0.5 text-2xl font-bold rounded bg-white border-slate-200">{word.digit[4]}</div>
-            <div className="w-14 h-14 border-solid border-2 flex items-center justify-center mx-0.5 text-2xl font-bold rounded bg-white border-slate-200">{word.digit[5]}</div>
+            <div className={colorBasic + colorState[0]}>{word.digit[0]}</div>
+            <div className={colorBasic + colorState[1]}>{word.digit[1]}</div>
+            <div className={colorBasic + colorState[2]}>{word.digit[2]}</div>
+            <div className={colorBasic + colorState[3]}>{word.digit[3]}</div>
+            <div className={colorBasic + colorState[4]}>{word.digit[4]}</div>
+            <div className={colorBasic + colorState[5]}>{word.digit[5]}</div>
         </div>
     )
 }
