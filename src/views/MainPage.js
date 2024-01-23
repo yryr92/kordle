@@ -51,6 +51,8 @@ function MainPage() {
     const keyboardGreen = "bg-green-500 hover:bg-green-600 active:bg-green-700 text-white";
     const keyboardGrey = "bg-slate-400 text-white";
 
+    const json = {};
+
     //console.log(words);
 
     //const arr = [];
@@ -80,7 +82,9 @@ function MainPage() {
 
         //console.log(document.querySelector("#root > div > div.container-sm.p-3 > div:nth-child(1)"));
 
-        console.log("" + document.querySelector("#root > div > div.container-sm.p-3 > div:nth-child(1) > button:nth-child(1)").innerHTML);
+        //console.log("document.querySelector : " + document.querySelector("#root > div > div.container-sm.p-3 > div:nth-child(1) > button:nth-child(1)").innerHTML);
+
+        console.log("과연 ? : " + document.querySelector("#root > div > div.container-sm.p-3").childElementCount);
 
         const handleKeyDown = (e) => {
             
@@ -144,10 +148,13 @@ function MainPage() {
                 } else {
                     compareArr[i] = 'N';
                 }
+
+                if(!json.hasOwnProperty(word[i])) json[word[i]] = compareArr[i];
             }
 
             words[line].state = compareArr;
             console.log("compareArr : " + compareArr);
+            console.log("json : " + JSON.stringify(json));
 
             setDigit(0);
             setLine(line + 1);

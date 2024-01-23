@@ -1,0 +1,21 @@
+.keyboard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .keyboard-row {
+    display: flex;
+  }
+  
+  .keyboard-key {
+    display: inline-block;
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+  }
+  
+  .active-key {
+    background-color: #ffcccb; /* 선택된 키의 배경색을 여기에 정의하세요 */
+  }

@@ -5,11 +5,12 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import MainPage from './views/MainPage';
 import Wordle from './views/Wordle';
+import Keyboard from './views/KeyBoard';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <MainPage />
+    <Keyboard />
   </React.StrictMode>
 );
 
