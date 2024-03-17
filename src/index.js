@@ -10,7 +10,7 @@ import Keyboard from './views/KeyBoard';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Keyboard />
+    <MainPage />
   </React.StrictMode>
 );
 

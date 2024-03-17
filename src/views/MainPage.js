@@ -42,7 +42,7 @@ function MainPage() {
 
     const [digit, setDigit] = useState(0);
     const [line, setLine] = useState(0);
-    const [answer, setAnswer] = useState("정답");
+    const [answer, setAnswer] = useState("신앙");
     const Hangul = require('hangul-js');
 
     const keyboardBasic = "flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none ";
@@ -84,7 +84,7 @@ function MainPage() {
 
         //console.log("document.querySelector : " + document.querySelector("#root > div > div.container-sm.p-3 > div:nth-child(1) > button:nth-child(1)").innerHTML);
 
-        console.log("과연 ? : " + document.querySelector("#root > div > div.container-sm.p-3").childElementCount);
+        //console.log("과연 ? : " + document.querySelector("#root > div > div.container-sm.p-3").childElementCount);
 
         const handleKeyDown = (e) => {
             
@@ -132,24 +132,41 @@ function MainPage() {
     }
 
     // 단어 제출
-    const submitWord = word => {
-        console.log("submitWord : " + word);
+    const submitWord = submit => {
+        console.log("submitWord : " + submit);
 
         if(digit < 6) {
             alert("음운이 부족합니다");
         } else {
             const answerArr = Hangul.disassemble(answer);
+            const submitMap = new Map();
+            // TO-DO submitMap undefined로 나오는 거 수정하기
             for (let i = 0; i < answerArr.length; i++) {
 
-                if (word[i] === answerArr[i]) {
+                if (submit[i] === answerArr[i]) {
                     compareArr[i] = 'C';
-                } else if (answerArr.includes(word[i])) {
+                    submitMap.set(submit[i], submitMap.get(submit[i]) + 1);
+                }
+                
+            }
+
+            for (let i = 0; i < answerArr.length; i++) {
+                
+                var ccc = answerArr.reduce((cnt, element) => cnt + (submit[i] === element), 0);
+                console.log("submit[i] : " + submit[i])
+                console.log(ccc)
+                console.log("answer.includes(submit[i]) : " + answer.includes(submit[i]))
+                console.log(submitMap.get(submit[i]));
+
+                if (submit[i] === answerArr[i]) {
+                    continue;
+                } else if(answer.includes(submit[i]) && submitMap.get(submit[i]) < ccc) {
                     compareArr[i] = 'U';
+                    submitMap.set(submit[i], submitMap.get(submit[i]) + 1);
                 } else {
                     compareArr[i] = 'N';
                 }
-
-                if(!json.hasOwnProperty(word[i])) json[word[i]] = compareArr[i];
+                
             }
 
             words[line].state = compareArr;
