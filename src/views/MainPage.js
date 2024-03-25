@@ -42,7 +42,7 @@ function MainPage() {
 
     const [digit, setDigit] = useState(0);
     const [line, setLine] = useState(0);
-    const [answer, setAnswer] = useState("신앙");
+    const [answer, setAnswer] = useState("양심");
     const Hangul = require('hangul-js');
 
     const keyboardBasic = "flex items-center justify-center rounded mx-0.5 text-base font-bold cursor-pointer select-none ";
@@ -135,17 +135,24 @@ function MainPage() {
     const submitWord = submit => {
         console.log("submitWord : " + submit);
 
+        const submitMap = new Map();
+
         if(digit < 6) {
             alert("음운이 부족합니다");
         } else {
             const answerArr = Hangul.disassemble(answer);
-            const submitMap = new Map();
             // TO-DO submitMap undefined로 나오는 거 수정하기
             for (let i = 0; i < answerArr.length; i++) {
 
                 if (submit[i] === answerArr[i]) {
                     compareArr[i] = 'C';
-                    submitMap.set(submit[i], submitMap.get(submit[i]) + 1);
+
+                    if(submitMap.get(submit[i]) === undefined) {
+                        submitMap.set(submit[i], 1);
+                    } else {
+                        submitMap.set(submit[i], submitMap.get(submit[i]) + 1);
+                    }
+
                 }
                 
             }
@@ -153,14 +160,14 @@ function MainPage() {
             for (let i = 0; i < answerArr.length; i++) {
                 
                 var ccc = answerArr.reduce((cnt, element) => cnt + (submit[i] === element), 0);
-                console.log("submit[i] : " + submit[i])
-                console.log(ccc)
-                console.log("answer.includes(submit[i]) : " + answer.includes(submit[i]))
-                console.log(submitMap.get(submit[i]));
+                console.log("1. submit[i] : " + submit[i])
+                console.log("2. answerArr에 포함된 갯수 : " + ccc)
+                console.log("3. answerArr.includes(submit[i]) : " + answerArr.includes(submit[i]))
+                console.log("4. submitMap.get : " + submitMap.get(submit[i]));
 
                 if (submit[i] === answerArr[i]) {
                     continue;
-                } else if(answer.includes(submit[i]) && submitMap.get(submit[i]) < ccc) {
+                } else if(answerArr.includes(submit[i]) && (submitMap.get(submit[i]) === undefined || submitMap.get(submit[i]) < ccc)) {
                     compareArr[i] = 'U';
                     submitMap.set(submit[i], submitMap.get(submit[i]) + 1);
                 } else {

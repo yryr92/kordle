@@ -6,6 +6,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
+### `npm dev`
+nodemon으로 해당 프로젝트 실행
+
 ### `npm start`
 
 Runs the app in the development mode.\
